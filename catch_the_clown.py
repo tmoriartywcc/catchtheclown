@@ -129,75 +129,38 @@ while running:
 
     #print(clown_rect.left, clown_rect.right, clown_rect.top, clown_rect.bottom)
     
-    #Get a list of all keys currently being pressed down
-    #keys = pygame.key.get_pressed()   
-    
-
-    #Move the dragon continously
-    #if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and dragon_rect.left > 0:
-    #    dragon_rect.x -= PLAYER_VELOCITY
-    #if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and dragon_rect.right < WINDOW_WIDTH:
-    #    dragon_rect.x += PLAYER_VELOCITY
-    #if keys[pygame.K_UP] and player_rect.top > 64:
-    #    player_rect.y -= PLAYER_VELOCITY
-    #if keys[pygame.K_DOWN] and player_rect.bottom < WINDOW_HEIGHT:
-    #    player_rect.y += PLAYER_VELOCITY
-
-    #Move the coin
-    #if coin_rect.x < 0:
-        #player missed coin
-    #    player_lives -= 1
-    #    miss_sound.play()
-        #place coin off the end of the screen again
-    #    coin_rect.x = WINDOW_WIDTH + BUFFER_DISTANCE
-    #    coin_rect.y = random.randint(64, WINDOW_HEIGHT - 32)
-    #else:
-    #    coin_rect.x -= coin_velocity
-        #move hte coint
-    #Check for collison between player and coin
-    #if player_rect.colliderect(coin_rect):
-    #    score += 1
-    #    coin_sound.play()
-    #    coin_velocity += COIN_ACCELERATION
-    #    coin_rect.x = WINDOW_WIDTH + BUFFER_DISTANCE
-    #    coin_rect.y = random.randint(64, WINDOW_HEIGHT - 32)
 
     #update HUD
-    #score_text = font.render('Score: ' + str(score), True, GREEN, DARKGREEN)
-    #lives_text = font.render('Lives: ' + str(player_lives), True, GREEN, DARKGREEN)
+    score_text = font.render('Score: ' + str(score), True, YELLOW)
+    lives_text = font.render('Lives: ' + str(player_lives), True, YELLOW)
 
 
-    #if player_lives == 0:
-    #    display_surface.blit(game_over_text, game_over_rect)
-    #    display_surface.blit(continue_text, continue_rect)
-    #    pygame.display.update()
+    #check for game over
+    if player_lives == 0:
+        display_surface.blit(game_over_text, game_over_rect)
+        display_surface.blit(continue_text, continue_rect)
+        pygame.display.update()
 
-        #Pause game until player presses a key, then reset
-    #    pygame.mixer.music.stop()
-    #    is_paused = True
-    #    while is_paused:
-    #        for event in pygame.event.get():
-                #player wants to play again
-    #            if event.type == pygame.KEYDOWN:
-    #                score = 0
-    #                player_lives = PLAYER_STARTING_LIVES
-    #                player_rect.y = WINDOW_HEIGHT // 2
-    #                coin_velocity = COIN_STARTING_VELOCITY
-    #                pygame.mixer.music.play(-1, 0.0)
-    #                is_paused = False
-                #player wants to quit
-    #            if event.type == pygame.QUIT:
-    #                is_paused = False
-    #                running = False
+        #pause game until player clicks and then reset game.
+        pygame.mixer.music.stop()
+        is_paused = True
+        while is_paused:
+            #check if player want to play again
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    score = 0
+                    player_lives = PLAYER_STARTING_LIVES
+                    clown_rect.center = (WINDOW_WIDTH//2, WINDOW_HEIGHT//2)
+                    clown_velocity = CLOWN_STARTING_VELOCITY
+                    clown_dx = random.choice([-1, 1])
+                    clown_dy = random.choice([-1, 1])
 
+                    pygame.mixer.music.play(-1, 0.0)
+                    is_paused = False
+                if event.type == pygame.QUIT:
+                    is_paused = False
+                    running = False
 
-    #Fill the display surface to cover old images
-    #display_surface.fill((0,0,0))
-
-    #Draw rectangles to represent rectangles
-    #pygame.draw.rect(display_surface, (0,255,0), dragon_rect, 1)
-    #pygame.draw.rect(display_surface, (255,0,0), coin_rect, 1)
-    
 
     #Blit background
     display_surface.blit(background_image, background_rect)
